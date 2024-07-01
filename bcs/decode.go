@@ -230,11 +230,13 @@ fieldLoop:
 				}
 			}
 		default:
-			k, err := d.decode(field)
+			ind := reflect.New(field.Type())
+			k, err := d.decode(ind)
 			n += k
 			if err != nil {
 				return n, err
 			}
+			field.Set(ind.Elem())
 		}
 	}
 
@@ -304,7 +306,7 @@ func (d *Decoder) decodeArray(v reflect.Value) (int, error) {
 	} else {
 		for i := 0; i < size; i++ {
 			idx := reflect.New(elementType)
-			k, err := d.decode(idx.Elem())
+			k, err := d.decode(idx)
 			n += k
 			if err != nil {
 				return n, err
@@ -331,7 +333,7 @@ func (d *Decoder) decodeSlice(v reflect.Value) (int, error) {
 	if elementType.Kind() == reflect.Pointer {
 		for i := 0; i < size; i++ {
 			ind := reflect.New(elementType.Elem())
-			k, err := d.decode(ind.Elem())
+			k, err := d.decode(ind)
 			n += k
 			if err != nil {
 				return n, err

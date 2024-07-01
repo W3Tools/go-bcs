@@ -15,9 +15,6 @@ jobs:
         with:
           go-version: 1.22
 
-      - name: Authenticate with GitHub token
-        run: echo "${{ secrets.GH_PAT }}" | gh auth login --with-token
-
       - name: Install dependencies
         run: go mod tidy
 

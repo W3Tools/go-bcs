@@ -119,8 +119,14 @@ func (i *Uint256) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON: converts JSON to Uint256.
 func (i *Uint256) UnmarshalJSON(data []byte) error {
+	var str string
+	err := json.Unmarshal(data, &str)
+	if err != nil {
+		return err
+	}
+
 	v := new(big.Int)
-	if err := v.UnmarshalJSON(data); err != nil {
+	if err := v.UnmarshalJSON([]byte(str)); err != nil {
 		return err
 	}
 
